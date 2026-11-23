@@ -1,0 +1,11 @@
+case,assessment_id,model,prompt_version,state,status,latency_ms,input_tokens,output_tokens,validated_count,error_type,predicted
+r01,9b752da7-5723-4d35-88a4-9b3b72193229,azpu-qwen3-0.6b-q4_k_m.gguf,azpu-extract-v2,evidence_ready,ok,4343.87,310,76,0,,
+r02,f887823c-2228-44d5-b8c6-d30561cc047d,azpu-qwen3-0.6b-q4_k_m.gguf,azpu-extract-v2,evidence_ready,ok,3043.45,312,78,0,,
+r03,b04f63c5-8353-43a9-ae7c-8f5b366a3e58,azpu-qwen3-0.6b-q4_k_m.gguf,azpu-extract-v2,evidence_ready,ok,3217.74,313,78,0,,
+r04,04439e46-0a44-4700-8fbb-8cef3e75c757,azpu-qwen3-0.6b-q4_k_m.gguf,azpu-extract-v2,evidence_ready,ok,3810.95,314,89,1,,python
+r05,5145752b-0b88-4052-a5e8-37e95febafcf,azpu-qwen3-0.6b-q4_k_m.gguf,azpu-extract-v2,evidence_ready,ok,3481.26,313,78,0,,
+r06,d0b2b14a-68dc-48c5-9d06-12ae213dfd6c,azpu-qwen3-0.6b-q4_k_m.gguf,azpu-extract-v2,evidence_ready,ok,3482.69,302,78,0,,
+r07,4b06dd61-635a-4bb6-a255-23f6504cd9fb,azpu-qwen3-0.6b-q4_k_m.gguf,azpu-extract-v2,evidence_ready,ok,3293.77,310,76,0,,
+r08,78ca7df2-014b-4b9c-9fe1-0565abf14866,azpu-qwen3-0.6b-q4_k_m.gguf,azpu-extract-v2,evidence_ready,ok,3510.79,307,78,0,,
+r09,11f99227-33a1-4ccb-b55f-8aaa4205e55d,azpu-qwen3-0.6b-q4_k_m.gguf,azpu-extract-v2,evidence_ready,ok,3413.07,307,78,0,,
+r10,9b8051d9-5013-4e03-90bd-6a58b3ab2aa6,azpu-qwen3-0.6b-q4_k_m.gguf,azpu-extract-v2,evidence_ready,ok,3697.58,317,78,0,,
