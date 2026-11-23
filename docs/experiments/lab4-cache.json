@@ -1,0 +1,54 @@
+{
+  "before": {
+    "calls": [
+      {
+        "assessment_id": "before-1",
+        "model": "azpu-qwen3-4b.gguf",
+        "prompt_version": "azpu-segments-1",
+        "input_tokens": 302,
+        "output_tokens": 22,
+        "status": "ok",
+        "validated_count": 3,
+        "latency_ms": 8076.91
+      },
+      {
+        "assessment_id": "before-2",
+        "model": "azpu-qwen3-4b.gguf",
+        "prompt_version": "azpu-segments-1",
+        "input_tokens": 302,
+        "output_tokens": 22,
+        "status": "ok",
+        "validated_count": 3,
+        "latency_ms": 2303.38
+      }
+    ],
+    "input_tokens": 604,
+    "output_tokens": 44
+  },
+  "after": {
+    "calls": [
+      {
+        "assessment_id": "after-1",
+        "model": "azpu-qwen3-4b.gguf",
+        "prompt_version": "azpu-segments-1",
+        "input_tokens": 302,
+        "output_tokens": 22,
+        "status": "ok",
+        "validated_count": 3,
+        "latency_ms": 2181.28
+      },
+      {
+        "assessment_id": "after-2",
+        "model": "azpu-qwen3-4b.gguf",
+        "prompt_version": "azpu-segments-1",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "status": "cache_hit",
+        "latency_ms": 0.01,
+        "validated_count": 3
+      }
+    ],
+    "input_tokens": 302,
+    "output_tokens": 22
+  }
+}

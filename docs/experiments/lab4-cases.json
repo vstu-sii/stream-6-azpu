@@ -1,0 +1,10 @@
+[
+  {"id": "h01", "resume": "Сам написал Python-обработчик платежей. Реализовал маршруты на FastAPI. Настроил миграции PostgreSQL. Играю в шахматы по выходным.", "gold": ["python", "fastapi", "postgresql"], "gold_segments": {"python": "s1", "fastapi": "s2", "postgresql": "s3"}},
+  {"id": "h02", "resume": "Готовил отчёты в Excel. Коллеги писали сервис на Python и FastAPI. PostgreSQL изучаю по документации.", "gold": [], "gold_segments": {}},
+  {"id": "h03", "resume": "Переписал Python-скрипт импорта. FastAPI только планирую изучить. Пользовался SQLite. Участвовал в книжном клубе.", "gold": ["python"], "gold_segments": {"python": "s1"}},
+  {"id": "h04", "resume": "Самостоятельно разработал REST API на FastAPI. Построил индексы в Postgres. Иногда устраиваю турпоходы.", "gold": ["python", "fastapi", "postgresql"], "gold_segments": {"python": "s1", "fastapi": "s1", "postgresql": "s2"}},
+  {"id": "h05", "resume": "Реализовал витрину на Django и Python. PostgreSQL и FastAPI не использовал. Выступал с докладом о командной работе.", "gold": ["python"], "gold_segments": {"python": "s1"}},
+  {"id": "h06", "resume": "Разрабатывала SQL-запросы для PostgreSQL. Знакома с обзором Python, без практических заданий. Готовлю презентации.", "gold": ["postgresql"], "gold_segments": {"postgresql": "s1"}},
+  {"id": "h07", "resume": "Писала код на Питоне. Участвовала в проекте на FastAPI как дизайнер. Оптимизировала запросы Postgres. Учу немецкий.", "gold": ["python", "postgresql"], "gold_segments": {"python": "s1", "postgresql": "s3"}},
+  {"id": "h08", "resume": "Сам разработал Python-сервис на FastAPI. Использовал Redis и SQLite. Хожу в бассейн.", "gold": ["python", "fastapi"], "gold_segments": {"python": "s1", "fastapi": "s1"}}
+]

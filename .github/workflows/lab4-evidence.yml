@@ -1,0 +1,33 @@
+name: Lab 4 evidence
+
+on:
+  push:
+    branches: [lab4-ai-engineer-infrastructure]
+  pull_request:
+    paths:
+      - '.github/workflows/lab4-evidence.yml'
+      - 'docs/experiments/lab4*'
+      - 'docs/experiments/verify_lab4.py'
+      - 'ml/prompts_v2/**'
+      - 'ml/models/baseline.py'
+      - 'ml/tools/**'
+      - 'backend/**'
+      - 'tests/test_evidence_timeout.py'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify prompt checksums, traces, metrics and cost inputs
+        run: python docs/experiments/verify_lab4.py
+      - name: Install API test dependencies
+        run: python -m pip install 'fastapi>=0.115,<1' 'httpx>=0.27,<1'
+      - name: Verify tool timeout and API fallback
+        run: python -m unittest discover -s tests -p test_evidence_timeout.py -v

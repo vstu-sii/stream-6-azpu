@@ -27,16 +27,17 @@ REQUIREMENTS = [
 ]
 
 
-async def run(path, output):
+async def run(path, output, cases=CASES):
     os.environ["AZPU_MODEL_PATH"] = str(path)
     with tempfile.TemporaryDirectory() as directory:
         trace = Path(directory) / "trace.jsonl"
         os.environ["AZPU_TRACE_FILE"] = str(trace)
         os.environ.pop("AZPU_TRACE_SYNTHETIC_PAYLOADS", None)
+        os.environ.pop("AZPU_SYNTHETIC_CACHE", None)
         calls = []
         predictions = {}
         async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
-            for case in CASES:
+            for case in cases:
                 reply = await client.post("/v1/ai/assessments", json={
                     "vacancy_revision": "backend-v1", "requirements": REQUIREMENTS, "resume_text": case["resume"],
                 })
@@ -53,8 +54,18 @@ async def run(path, output):
         writer.writeheader()
         writer.writerows(rows)
     times = sorted(row["latency_ms"] for row in rows)
+    if cases is CASES:
+        metrics = evaluate(predictions)
+    else:
+        gold = {c["id"]: set(c["gold"]) for c in cases}
+        tp = sum(len(predictions[k] & expected) for k, expected in gold.items())
+        fp = sum(len(predictions[k] - expected) for k, expected in gold.items())
+        fn = sum(len(expected - predictions[k]) for k, expected in gold.items())
+        metrics = {"n": len(cases), "tp": tp, "fp": fp, "fn": fn,
+                   "f1": round(2 * tp / max(2 * tp + fp + fn, 1), 3),
+                   "exact": sum(predictions[k] == expected for k, expected in gold.items())}
     return {
-        "model": path.name, **evaluate(predictions), "p50_ms": round(statistics.median(times), 2),
+        "model": path.name, **metrics, "p50_ms": round(statistics.median(times), 2),
         "p95_ms": times[math.ceil(0.95 * len(times)) - 1],
         "mean_input_tokens": statistics.mean(row["input_tokens"] for row in rows),
         "mean_output_tokens": statistics.mean(row["output_tokens"] for row in rows),
@@ -67,4 +78,5 @@ if __name__ == "__main__":
     parser.add_argument("--model", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    os.environ["AZPU_PROMPT_MODE"] = "quote"
     print(json.dumps(asyncio.run(run(args.model, args.output)), ensure_ascii=False, indent=2))
