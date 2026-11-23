@@ -1,0 +1,6 @@
+.git
+.azpu
+.venv
+**/__pycache__
+*.gguf
+*.local.jsonl

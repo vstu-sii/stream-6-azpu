@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AZPU — Отбор резюме</title>
+<main>
+  <h1>Отбор резюме под вакансию</h1>
+  <p>Демонстрация на синтетическом резюме. Вывод модели требует проверки рекрутером.</p>
+  <p><strong>Требование</strong> Самостоятельная разработка на Python</p>
+  <p><strong>Резюме</strong> Самостоятельно написал сервис на Python для обработки заявок.</p>
+  <button id="assess">Проверить пример</button>
+  <p id="status" role="status"></p>
+  <ul id="findings"></ul>
+</main>
+<script>
+const button = document.querySelector('#assess');
+const status = document.querySelector('#status');
+const findings = document.querySelector('#findings');
+
+button.addEventListener('click', async () => {
+  button.disabled = true;
+  status.textContent = 'Выполняется оценка…';
+  findings.replaceChildren();
+
+  try {
+    const response = await fetch('/v1/ai/assessments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        vacancy_revision: 'demo-v1',
+        requirements: [{ id: 'python', text: 'Самостоятельная разработка на Python' }],
+        resume_text: 'Самостоятельно написал сервис на Python для обработки заявок.'
+      })
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const result = await response.json();
+    const summary = result.state === 'manual_review' ? 'Нужна ручная проверка' : 'Оценка сохранена';
+    status.textContent = `${summary}. ID: ${result.assessment_id}`;
+    for (const item of result.findings) {
+      const row = document.createElement('li');
+      row.textContent = item.evidence?.quote ?? item.question;
+      findings.append(row);
+    }
+  } catch (error) {
+    status.textContent = `Не удалось получить оценку. ${error.message}`;
+  } finally {
+    button.disabled = false;
+  }
+});
+</script>
+</html>

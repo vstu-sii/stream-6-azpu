@@ -6,6 +6,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 from starlette.concurrency import run_in_threadpool
 
+from backend.storage import save_assessment
 from ml.models.baseline import assess
 
 router = APIRouter()
@@ -49,4 +50,5 @@ async def assess_resume(payload: AssessmentRequest):
     result = {"assessment_id": assessment_id, "state": "manual_review" if reason else "evidence_ready", "findings": findings}
     if reason:
         result["reason"] = reason
+    await run_in_threadpool(save_assessment, result)
     return result
