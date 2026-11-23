@@ -1,0 +1,11 @@
+@startuml
+!include <C4/C4_Context>
+title AZPU - System Context
+
+Person(recruiter, "Recruiter", "Reviews candidate evidence against vacancy criteria")
+System(azpu, "AZPU Resume Matcher", "Prepares evidence and follow-up questions for recruiter review")
+System_Ext(model, "LLM provider", "Generates proposed evidence from the approved input context")
+
+Rel(recruiter, azpu, "Provides vacancy criteria and resume; reviews findings", "HTTPS")
+Rel(azpu, model, "Requests structured evidence proposals", "HTTPS")
+@enduml
