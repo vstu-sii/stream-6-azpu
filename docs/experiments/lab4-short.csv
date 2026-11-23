@@ -1,0 +1,9 @@
+case,assessment_id,model,prompt_version,state,status,latency_ms,input_tokens,output_tokens,validated_count,error_type,predicted
+h01,9f1f8ba0-1381-426e-8bd3-2a72bcc26cf3,azpu-qwen3-4b.gguf,azpu-segments-short-1,evidence_ready,ok,2962.95,284,22,3,,"fastapi,postgresql,python"
+h02,c6f9309a-f357-4d44-82dd-e88c1ed5d840,azpu-qwen3-4b.gguf,azpu-segments-short-1,evidence_ready,ok,3034.46,270,20,2,,"fastapi,python"
+h03,ce1557b8-2963-4be9-8e87-21c1fd0ac6e2,azpu-qwen3-4b.gguf,azpu-segments-short-1,evidence_ready,ok,2529.83,271,18,1,,python
+h04,5b630b96-9ae2-4436-81dd-93cf1e57cf3f,azpu-qwen3-4b.gguf,azpu-segments-short-1,evidence_ready,ok,2792.6,272,22,3,,"fastapi,postgresql,python"
+h05,581c5a51-e19e-4c10-b6fb-66e8e0419f53,azpu-qwen3-4b.gguf,azpu-segments-short-1,evidence_ready,ok,2478.25,269,18,1,,python
+h06,b304a36b-6ed4-46ec-be80-23f959c40618,azpu-qwen3-4b.gguf,azpu-segments-short-1,evidence_ready,ok,2827.41,278,22,3,,"fastapi,postgresql,python"
+h07,15888a39-9042-49fb-a02f-a9f72eaa81d2,azpu-qwen3-4b.gguf,azpu-segments-short-1,evidence_ready,ok,3244.14,289,22,3,,"fastapi,postgresql,python"
+h08,f6090714-7fd4-4733-8d2c-e51ea89342f7,azpu-qwen3-4b.gguf,azpu-segments-short-1,evidence_ready,ok,2141.44,255,20,2,,"fastapi,python"
