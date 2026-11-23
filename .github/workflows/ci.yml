@@ -1,0 +1,15 @@
+name: CI
+on:
+  pull_request:
+  push:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose up -d
+      - run: |
+          curl --fail --retry 10 --retry-delay 1 --retry-connrefused http://127.0.0.1:8080/ | grep -F 'Hello, world!'
+      - if: always()
+        run: docker compose down
