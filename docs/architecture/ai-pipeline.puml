@@ -1,0 +1,21 @@
+@startuml
+actor Recruiter
+participant API
+participant "Context builder" as Context
+participant "Model gateway" as Model
+participant "Evidence validator" as Validator
+participant "Metrics" as Metrics
+Recruiter -> API: POST /v1/ai/assessments
+API -> Context: ID критериев и текст резюме
+Context -> Context: фильтр данных и расчёт токенов
+alt Контекст допустим и бюджет есть
+  Context -> Model: запрос и JSON-схема
+  Model --> Validator: предложенные свидетельства
+  Validator -> Validator: структура, ID и дословная цитата
+  Validator --> API: проверенные строки и причины уточнения
+else Лимит, недоступность или невалидный ответ
+  Context --> API: ручная проверка
+end
+API -> Metrics: задержка, токены, исход, невалидные строки
+API --> Recruiter: 200, карточка для проверки человеком
+@enduml
