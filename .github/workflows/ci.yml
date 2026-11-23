@@ -1,0 +1,30 @@
+name: CI
+on:
+  pull_request:
+  push:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose up -d
+      - run: |
+          curl --fail --retry 10 --retry-delay 1 --retry-connrefused http://127.0.0.1:8080/ | grep -F 'Hello, world!'
+      - if: always()
+        run: docker compose down
+
+  design:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npx --yes aact@beta check
+      - run: docker compose -f compose.dev.yml up -d --wait
+      - run: |
+          curl -fsS http://127.0.0.1:8080/ | grep -F 'Hello, world!'
+          curl -fsS http://127.0.0.1:8080/api/healthz | grep -F '"mode":"stub"'
+      - if: always()
+        run: docker compose -f compose.dev.yml down

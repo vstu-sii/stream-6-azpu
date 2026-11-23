@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+title AZPU - Container Diagram
+
+Person(recruiter, "Recruiter", "Reviews candidate evidence")
+System_Ext(model, "LLM provider", "Returns structured evidence proposals")
+
+System_Boundary(azpu, "AZPU Resume Matcher") {
+    Container(web, "Web", "nginx and HTML", "Serves the recruiter interface and forwards API requests")
+    Container(api, "Assessment API", "Python and FastAPI", "Validates input, prepares the model context, and checks proposed evidence against the resume")
+    Container(api_acl, "Model gateway", "Python", "Translates evidence requests and owns provider credentials, timeouts and rate limits", $tags="acl")
+    Rel(api, api_acl, "Submits an internal evidence request", "HTTP / JSON")
+}
+
+Rel(recruiter, web, "Opens the interface and reviews findings", "HTTPS")
+Rel(web, api, "Forwards assessment requests", "HTTP / JSON")
+Rel(api_acl, model, "Requests evidence proposals with a structured schema", "HTTPS / JSON via API Gateway")
+@enduml
