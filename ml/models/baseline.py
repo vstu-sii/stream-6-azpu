@@ -9,7 +9,7 @@ from collections import OrderedDict
 from functools import lru_cache
 
 from ml.prompts_v2 import PROMPTS, QUOTE_TEMPLATE, TEMPLATE, choose_segments, split_segments
-from ml.tools.evidence import read_segment
+from ml.tools.evidence import read_segment_with_timeout
 from ml.tracing import record
 
 PROMPT_VERSION = "azpu-extract-v2"
@@ -74,16 +74,25 @@ def build_prompt(requirements, segments, method="quote"):
     return f"<|im_start|>user\n{instruction}{payload}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
 
 
-def validate(raw, requirements, segments, method="quote"):
+def validate(raw, requirements, segments, method="quote", *, tool_timeouts=None):
     parsed = json.loads(raw)
     ids = {item["id"] for item in requirements}
     if not isinstance(parsed, dict) or set(parsed) != ids:
         raise ValueError("Invalid model envelope")
     if method != "quote":
-        return {
-            key: row for key, value in parsed.items()
-            if (row := read_segment(segments, value)) is not None
-        }
+        accepted = {}
+        for key, segment_id in parsed.items():
+            if not isinstance(segment_id, str):
+                continue
+            try:
+                row = read_segment_with_timeout(segments, segment_id)
+            except TimeoutError:
+                if tool_timeouts is not None:
+                    tool_timeouts.append(key)
+                continue
+            if row is not None:
+                accepted[key] = row
+        return accepted
     accepted = {}
     for key, item in parsed.items():
         if not isinstance(item, dict):
@@ -144,10 +153,13 @@ def assess(assessment_id, requirements, resume_text):
                     raw = reply["choices"][0]["text"]
                     event["input_tokens"] = reply["usage"]["prompt_tokens"]
                     event["output_tokens"] = reply["usage"]["completion_tokens"]
-                    citations = validate(raw, requirements, segments, method)
+                    tool_timeouts = []
+                    citations = validate(raw, requirements, segments, method, tool_timeouts=tool_timeouts)
                     event["status"] = "ok"
                     event["validated_count"] = len(citations)
-                    if cache_enabled:
+                    if tool_timeouts:
+                        event["evidence_tool_timeouts"] = len(tool_timeouts)
+                    if cache_enabled and not tool_timeouts:
                         _CACHE[cache_key] = citations
                         if len(_CACHE) > _CACHE_SIZE:
                             _CACHE.popitem(last=False)
