@@ -1,2 +1,19 @@
-# stream-6-azpu
+﻿# Отбор резюме под вакансию
+
 2026, 6 курс · AZPU
+
+## Структура
+
+- `site/index.html` — стартовая страница проекта.
+- `compose.yaml` — локальная среда с nginx.
+- `.github/workflows/ci.yml` — проверка запуска Compose и ответа стартовой страницы.
+
+## Локальный запуск
+
+Установите Docker с Compose и выполните `docker compose up -d` из корня репозитория.
+Страница доступна по адресу http://127.0.0.1:8080/.
+Для остановки выполните `docker compose down`.
+
+## Публичная демонстрация
+
+[Hello World](https://ziifurs.github.io/azpu-lab1-demo/)
