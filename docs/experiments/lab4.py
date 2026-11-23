@@ -5,6 +5,7 @@ import asyncio
 import json
 import os
 from pathlib import Path
+from hashlib import sha256
 
 from lab3 import HERE, REQUIREMENTS, run
 from ml.models.baseline import prepare_segments
@@ -30,7 +31,12 @@ async def compare(model, destination, cases):
     result = {"shortlist": shortlist_metrics(cases)}
     for variant in ("quote", "segment", "short"):
         os.environ["AZPU_PROMPT_MODE"] = variant
-        result[variant] = await run(model, destination / f"lab4-{variant}.csv", cases)
+        csv_path = destination / f"lab4-{variant}.csv"
+        result[variant] = await run(model, csv_path, cases)
+        prompt_path = HERE.parents[1] / "ml" / "prompts_v2" / ("quote-2.txt" if variant == "quote" else "segments-1.txt")
+        result[variant]["prompt_file"] = str(prompt_path.relative_to(HERE.parents[1]))
+        result[variant]["prompt_sha256"] = sha256(prompt_path.read_bytes()).hexdigest()
+        result[variant]["trace_sha256"] = sha256(csv_path.read_bytes()).hexdigest()
         print(variant, json.dumps(result[variant]), flush=True)
     (destination / "lab4-summary.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
 

@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 
 PROMPTS = {"segment": "azpu-segments-1", "short": "azpu-segments-short-1"}
+QUOTE_TEMPLATE = Path(__file__).with_name("quote-2.txt").read_text(encoding="utf-8")
 TEMPLATE = Path(__file__).with_name("segments-1.txt").read_text(encoding="utf-8")
 WORDS = re.compile(r"[a-zа-я][a-zа-я0-9]+", re.I)
 ALIASES = {"python": {"питон", "fastapi"}, "postgresql": {"postgres"}, "fastapi": {"fastapi"}}
